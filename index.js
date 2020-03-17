@@ -21,7 +21,6 @@ const resultsDescription = document.getElementById("results_description");
 
 // Functions
 const toggleAdvancedMenu = (val) => {
-    console.log(val);
     if (val) {
         advancedMenu.style.display = "block";
         advancedMenuEnabled = true;
@@ -53,8 +52,16 @@ const calculateExponentialGrowth = (start, rate, years, cap=-1) => {
     return popArray;
 };
 
-const growTowardsLimit = () => {
-    
+const growTowardsLimit = (start, rate, years, cap) => {
+    const popArray = [];
+    // See https://en.wikipedia.org/wiki/Logistic_function
+    let current = start;
+    for (let i = 0; i < years; i++) {
+        const growth = current*rate*(1-((current-start)/(cap - start)));
+        popArray.push(Math.round(current + growth));
+        current = popArray[i];
+    }
+    return popArray;
 };
 
 const calculateGrowth = () => {
@@ -62,7 +69,8 @@ const calculateGrowth = () => {
     const mNumYears = numYears.value;
     const mGrowthRate = growthRate.value * .01;
     const mStartingPop = startingPop.value * BILLION;
-    
+    const mMaxPop = maxPop.value * BILLION;
+
     if (startingPop.value == 7.8) {
         onCurrentYear = true;
     } else {
@@ -71,21 +79,45 @@ const calculateGrowth = () => {
 
     let popArray;
 
-    if (advancedMenuEnabled) {
-        const mMaxPop = maxPop.value;
-    }
-
     // Calculate growth
     if (!advancedMenuEnabled) {
         // Just exponential growth
         popArray = calculateExponentialGrowth(mStartingPop,
             mGrowthRate,
             mNumYears);
+    } else {
+        popArray = calculateExponentialGrowth(mStartingPop,
+            mGrowthRate,
+            mNumYears,
+            mMaxPop * 0.8);
+
+        let popArrayEnd = growTowardsLimit(utils.last(popArray),
+            mGrowthRate,
+            mNumYears - popArray.length,
+            mMaxPop);
+
+        popArray.concat(popArrayEnd);
     }
 
     // Show results
     if (advancedMenuEnabled) {
-        
+        // Get stable year
+        let stableYear = 0;
+        for (let i = 0; i < popArray; i++) {
+            if (popArray[i] >= mMaxPop * 0.99) {
+                stableYear = i;
+                break;
+            }
+        }
+        if (stableYear == 0) {
+            const lastPop = utils.last(popArray);
+            showResults('Population will not stabalize within this timeframe.');
+            showDescription(`It reaches ${lastPop} in ${mNumYears}.`)
+        } else {
+            showResults(`The population stabalizes in ${stableYear} years.`);
+            showDescription('');
+        }
+
     } else {
         const lastPop = utils.last(popArray);
         let timeDesc = `after ${mNumYears} years`;
