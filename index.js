@@ -3,6 +3,7 @@ import { utils } from './utils.js';
 // Globals
 let advancedMenuEnabled = false;
 let onCurrentYear = true;
+let POPULATIONCHART;
 const MILLION = 1000000;
 const BILLION = MILLION * 1000;
 const TRILLION = BILLION * 1000;
@@ -20,6 +21,38 @@ const resultsDescription = document.getElementById("results_description");
 
 
 // Functions
+const generateChart = (population) => {
+    if (POPULATIONCHART) {
+        POPULATIONCHART.destroy();
+    }
+    const data = {};
+    // TODO ability to include historical data, this will change
+    const numYears = population.length;
+    if (onCurrentYear) {
+        data.labels = utils.get_years_array(numYears, 2020);
+    } else {
+        data.labels = utils.get_years_array(numYears, 0);
+    }
+
+    data.datasets = [
+        {
+            label: 'Population',
+            borderColor: '#4682b4',
+            data: population
+        }
+    ];
+
+    const chartDiv = document.getElementById('population_chart');
+    const ctx = chartDiv.getContext('2d');
+    POPULATIONCHART = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: {}
+    });	
+};
+
+
+
 const toggleAdvancedMenu = (val) => {
     if (val) {
         advancedMenu.style.display = "block";
@@ -104,7 +137,6 @@ const calculateGrowth = () => {
         let stableYear = 0;
         for (let i = 0; i < popArray.length; i++) {
             if (popArray[i] >= mMaxPop * 0.97) {
-                console.log(i);
                 stableYear = i;
                 break;
             }
@@ -112,7 +144,7 @@ const calculateGrowth = () => {
         if (stableYear == 0) {
             const lastPop = utils.last(popArray);
             showResults('Population will not stabalize within this timeframe.');
-            showDescription(`It reaches ${lastPop} in ${mNumYears}.`)
+            showDescription(`It reaches ${lastPop.toLocaleString()} in ${mNumYears}.`)
         } else {
             showResults(`The population stabalizes in ${stableYear} years.`);
             showDescription('');
@@ -127,19 +159,22 @@ const calculateGrowth = () => {
         }
 
         if (lastPop > QUADRILLION) {
-            showResults(`Population: About ${Math.round(lastPop/QUADRILLION)} Quadrillion (${lastPop}) ${timeDesc}.`);
+            showResults(`Population: About ${Math.round(lastPop/QUADRILLION)} Quadrillion (${lastPop.toLocaleString()}) ${timeDesc}.`);
         } else if (lastPop > TRILLION) {
-            showResults(`Population: About ${Math.round(lastPop/TRILLION)} Trillion (${lastPop}) ${timeDesc}.`);
+            showResults(`Population: About ${Math.round(lastPop/TRILLION)} Trillion (${lastPop.toLocaleString()}) ${timeDesc}.`);
         } else {
-            showResults(`Population: About ${Math.round(lastPop/BILLION)} Billion (${lastPop}) ${timeDesc}.`);
+            showResults(`Population: About ${Math.round(lastPop/BILLION)} Billion (${lastPop.toLocaleString()}) ${timeDesc}.`);
         }
         showDescription('');
     }
+
+    generateChart(popArray);
 };
 
 // Button Bindings
 advancedMenuCheckbox.addEventListener('change', (event) => {
     toggleAdvancedMenu(advancedMenuCheckbox.checked);
+    calculateGrowth();
 });
 
 numYears.addEventListener('change', (event) => {
@@ -157,3 +192,6 @@ startingPop.addEventListener('change', (event) => {
 maxPop.addEventListener('change', (event) => {
     calculateGrowth();
 });
+
+// At start
+calculateGrowth();

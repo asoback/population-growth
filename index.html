@@ -5,6 +5,8 @@
         <title>Population Growth Calculator</title>
         <script type="module" src="./index.js"></script>
         <link rel="stylesheet" href="./style.css">
+        <!-- Chart.js -->
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     </head>
     <body>
         <div class="container">
@@ -15,7 +17,7 @@
             <div class=main-form>
                 <div>
                     <label for="num_years">Number of Years</label>
-                    <input id="num_years" type="number" value="250" step="50">
+                    <input id="num_years" type="number" value="100" step="50">
                     <label for="growth_rate">Rate</label>
                     <input id="growth_rate" type="number" value="1.2" step="0.1">%
                     <label for="starting_pop">Starting Population (Billions)</label>
@@ -35,9 +37,7 @@
 				<p id="results_description"></p>
             </div>
             <div class=chart-area>
-                <div >
-                    <canvas class="chart" id="PopulationChart"></canvas>
-                </div>
+                <canvas class="chart" id="population_chart"></canvas>
             </div>
         </div>
     </body>
