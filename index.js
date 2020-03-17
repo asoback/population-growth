@@ -122,7 +122,7 @@ const calculateGrowth = () => {
         popArray = calculateExponentialGrowth(mStartingPop,
             mGrowthRate,
             mNumYears,
-            mMaxPop * 0.8);
+            mMaxPop * 0.75);
 
         let popArrayEnd = growTowardsLimit(utils.last(popArray),
             mGrowthRate,

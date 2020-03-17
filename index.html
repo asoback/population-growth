@@ -10,7 +10,6 @@
     </head>
     <body>
         <div class="container">
-            <div class=banner></div>
             <div class=title>
                 <h1>Population Growth Calculator</h1>
             </div>
@@ -22,14 +21,14 @@
                     <input id="growth_rate" type="number" value="1.2" step="0.1">%
                     <label for="starting_pop">Starting Population (Billions)</label>
                     <input id="starting_pop" type="number" value="7.8" step="0.1">
+                    <div class="advanced_button">
+                        <label for="show_advanced">Carrying Capacity</label>
+                        <input id="show_advanced" type="checkbox">
+                    </div>
                     <div class="advanced_menu_options">
                         <label for="max_pop">Population Carrying Capacity (Billions)</label>
                         <input id="max_pop" type="number" value="10">
                     </div>
-                </div>
-                <div>
-                    <label for="show_advanced">Carrying Capacity</label>
-                    <input id="show_advanced" type="checkbox">
                 </div>
             </div>
             <div class=results_area>
@@ -38,6 +37,7 @@
             </div>
             <div class=chart-area>
                 <canvas class="chart" id="population_chart"></canvas>
+                <cite>Chart by <a href="https://www.chartjs.org/">chart.js</a></cite>
             </div>
         </div>
     </body>

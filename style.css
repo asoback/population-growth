@@ -15,17 +15,44 @@ body {
   }
   
   .container {
-    /* display: flex; */
+    display: block;
     padding: 10px;
-    background: #bcbcbc;
+    margin: 20px;
+    background: #e2e2e2;
   }
   
   .container>div {
+    padding: 5px;
     max-height: 20%;
     margin: 20px;
     background: #efefef;
+    display:block;
+  }
+
+  label {
+    display: block;
+  }
+
+  input {
+    margin-bottom: 5px;
   }
 
   .advanced_menu_options {
       display: none;
+  }
+
+  cite {
+    font-size: smaller;
+  }
+
+  .chart-area {
+    padding: 20px;
+  }
+
+  /* .advanced_button>input {
+    display: inline-block;
+  } */
+
+  .advanced_button>label {
+    display: inline-block;
   }
