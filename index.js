@@ -95,16 +95,16 @@ const calculateGrowth = () => {
             mGrowthRate,
             mNumYears - popArray.length,
             mMaxPop);
-
-        popArray.concat(popArrayEnd);
+        popArray = popArray.concat(popArrayEnd);
     }
 
     // Show results
     if (advancedMenuEnabled) {
         // Get stable year
         let stableYear = 0;
-        for (let i = 0; i < popArray; i++) {
-            if (popArray[i] >= mMaxPop * 0.99) {
+        for (let i = 0; i < popArray.length; i++) {
+            if (popArray[i] >= mMaxPop * 0.97) {
+                console.log(i);
                 stableYear = i;
                 break;
             }
