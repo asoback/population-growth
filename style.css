@@ -15,7 +15,17 @@ body {
   }
   
   .container {
-    display: flex;
-    margin: 10px;
+    /* display: flex; */
+    padding: 10px;
+    background: #bcbcbc;
   }
   
+  .container>div {
+    max-height: 20%;
+    margin: 20px;
+    background: #efefef;
+  }
+
+  .advanced_menu_options {
+      display: none;
+  }
